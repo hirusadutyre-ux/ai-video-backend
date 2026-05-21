@@ -1,16 +1,18 @@
 export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" })
-  }
-
   try {
-    const { prompt } = req.body
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Only POST allowed" })
+    }
+
+    const { prompt } = req.body || {}
 
     if (!prompt) {
       return res.status(400).json({ error: "Missing prompt" })
     }
 
-    // TEMP DEMO VIDEO (replace with AI later)
+    console.log("Prompt received:", prompt)
+
+    // 🔥 REAL SAFE TEST VIDEO (NO AI YET)
     const videoUrl =
       "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
 
@@ -20,8 +22,10 @@ export default async function handler(req, res) {
       videoUrl,
     })
   } catch (err) {
+    console.error(err)
+
     return res.status(500).json({
-      error: "Server crash",
+      error: "Server crashed",
       details: err.message,
     })
   }
